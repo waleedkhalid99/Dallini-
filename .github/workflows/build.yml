@@ -11,20 +11,11 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
+          flutter-version: '3.22.2'
           channel: 'stable'
-      - name: create android and fix config
-        run: |
-          mv lib/main.dart /tmp/main.dart
-          flutter create . --project-name dallini --overwrite
-          mv /tmp/main.dart lib/main.dart
-          flutter pub get
-          # fix minSdk for map
-          sed -i 's/minSdkVersion.*/minSdkVersion 21/' android/app/build.gradle || true
-          sed -i 's/minSdk .*/minSdk 21/' android/app/build.gradle || true
+      - run: flutter pub get
       - run: flutter build apk --debug
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: Dallini-APK-Map
           path: build/app/outputs/flutter-apk/app-debug.apk
