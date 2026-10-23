@@ -14,8 +14,11 @@ jobs:
           flutter-version: '3.22.0'
           channel: 'stable'
       - run: |
-          flutter create . --project-name dallini --org com.dallini.app
+          cp lib/main.dart /tmp/myapp.dart
+          flutter create . --project-name dallini --org com.dallini.app --platforms=android
+          cp /tmp/myapp.dart lib/main.dart
           flutter pub get
+          sed -i "s/ext.kotlin_version = '.*'/ext.kotlin_version = '1.9.22'/" android/build.gradle
           flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
