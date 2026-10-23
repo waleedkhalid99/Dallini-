@@ -13,7 +13,7 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Rebuild android structure correctly
+      - name: Fix android build files
         run: |
           rm -rf android
           mv lib/main.dart /tmp/main.dart
@@ -21,6 +21,8 @@ jobs:
           flutter create . --project-name dallini --org com.example --overwrite
           mv /tmp/main.dart lib/main.dart
           mv /tmp/pubspec.yaml pubspec.yaml
+          # fix kotlin version
+          sed -i "s/ext.kotlin_version = '.*'/ext.kotlin_version = '1.9.22'/" android/build.gradle
           flutter pub get
       - run: flutter build apk --release
       - name: Upload APK
