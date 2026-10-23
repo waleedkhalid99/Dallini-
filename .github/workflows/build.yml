@@ -1,8 +1,5 @@
-name: build
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+name: Build Dallini APK
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,26 +11,20 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.3'
+          flutter-version: '3.22.0'
           channel: 'stable'
-          cache: true
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Recreate Android folder
+      - name: Rebuild android structure correctly
         run: |
           rm -rf android
-          flutter create . --platforms=android --project-name dallini
-      - name: Fix SDK for flutter_tts
-        run: |
-          echo "" >> android/local.properties
-          echo "flutter.minSdkVersion=24" >> android/local.properties
-          echo "flutter.compileSdkVersion=36" >> android/local.properties
-          echo "flutter.targetSdkVersion=36" >> android/local.properties
-          cat android/local.properties
-      - name: Build APK
-        run: flutter build apk --debug
+          mv lib/main.dart /tmp/main.dart
+          mv pubspec.yaml /tmp/pubspec.yaml
+          flutter create . --project-name dallini --org com.example --overwrite
+          mv /tmp/main.dart lib/main.dart
+          mv /tmp/pubspec.yaml pubspec.yaml
+          flutter pub get
+      - run: flutter build apk --release
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Dallini-APK-Iraq
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: Dallini-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
