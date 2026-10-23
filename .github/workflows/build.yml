@@ -26,7 +26,7 @@ jobs:
         run: flutter pub get
 
       - name: Fix Project Name
-        run: sed -i 's/^name: .*/name: dallini/' pubspec.yaml
+        run: sed -i "s/^name: .*/name: dallini/" pubspec.yaml
 
       - name: Recreate Android folder
         run: |
