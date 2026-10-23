@@ -29,17 +29,22 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   static const CameraPosition _ramadi = CameraPosition(
     target: LatLng(33.425, 43.300),
-    zoom: 12,
+    zoom: 13,
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Dallini - خريطة الرمادي')),
-      body: const GoogleMap(
+      appBar: AppBar(
+        title: const Text('Dallini - الرمادي'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+      body: GoogleMap(
         initialCameraPosition: _ramadi,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,
+        zoomControlsEnabled: true,
       ),
     );
   }
