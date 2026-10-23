@@ -23,16 +23,16 @@ jobs:
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name dallini
-      - name: Force SDK 23
+      - name: Fix SDK correctly
         run: |
+          echo "" >> android/local.properties
           echo "flutter.minSdkVersion=23" >> android/local.properties
           echo "flutter.compileSdkVersion=34" >> android/local.properties
-      - name: Build with Gradle directly to see error
-        run: |
-          cd android
-          ./gradlew assembleDebug --stacktrace --info
-      - name: Upload APK if exists
-        if: always()
+          echo "flutter.targetSdkVersion=34" >> android/local.properties
+          cat android/local.properties
+      - name: Build APK
+        run: flutter build apk --debug
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Dallini-APK-Iraq
