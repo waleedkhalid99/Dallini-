@@ -35,12 +35,10 @@ jobs:
 
       - name: FORCE Fix SDK versions in gradle
         run: |
-          # نفلش كلشي ونخلي minSdk = 23 غصب
           sed -i "s/minSdkVersion.*/minSdkVersion 23/" android/app/build.gradle
           sed -i "s/flutter.minSdkVersion.*/23/" android/app/build.gradle
           sed -i "s/compileSdkVersion.*/compileSdkVersion 34/" android/app/build.gradle
           sed -i "s/targetSdkVersion.*/targetSdkVersion 34/" android/app/build.gradle
-          echo "--- بعد التصليح ---"
           cat android/app/build.gradle | grep -A2 -B2 SdkVersion
 
       - name: Build APK
