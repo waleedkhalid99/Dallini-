@@ -1,25 +1,49 @@
 name: build
-on: [push]
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
+
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.2'
+          flutter-version: '3.22.3'
           channel: 'stable'
-      - name: Fix old gradle project
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Recreate Android folder
         run: |
           rm -rf android
-          flutter create . --project-name dallini --platforms=android
-      - run: flutter pub get
-      - run: flutter build apk --debug
-      - uses: actions/upload-artifact@v4
+          flutter create . --platforms=android
+
+      - name: Fix Min SDK for Plugins
+        run: |
+          echo "flutter.minSdkVersion=24" >> android/local.properties
+          echo "flutter.targetSdkVersion=34" >> android/local.properties
+          sed -i 's/flutter.minSdkVersion=.*/flutter.minSdkVersion=24/' android/local.properties
+          sed -i 's/minSdkVersion.*/minSdkVersion 24/' android/app/build.gradle || true
+          sed -i 's/minSdk.*/minSdk = 24/' android/app/build.gradle.kts || true
+          cat android/local.properties
+
+      - name: Build APK
+        run: flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: Dallini-APK-Iraq
           path: build/app/outputs/flutter-apk/app-debug.apk
