@@ -13,6 +13,10 @@ jobs:
         with:
           flutter-version: '3.22.2'
           channel: 'stable'
+      - name: Fix Gradle project
+        run: |
+          rm -rf android
+          flutter create . --platforms=android --project-name dallini
       - run: flutter pub get
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v4
