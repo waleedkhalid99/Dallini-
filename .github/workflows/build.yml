@@ -11,20 +11,16 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.3'
+          flutter-version: '3.24.0'
           channel: 'stable'
-      - name: Recreate android with new Kotlin
+      - name: Create Android and Get Packages
         run: |
-          rm -rf android
-          flutter create . --platforms=android --project-name dallini --org com.example.dallini
-          echo "--- Before fix ---"
-          cat android/settings.gradle
-          sed -i 's/"org.jetbrains.kotlin.android" version ".*"/"org.jetbrains.kotlin.android" version "1.9.22" apply false/' android/settings.gradle
-          echo "--- After fix ---"
-          cat android/settings.gradle
-      - name: Build APK
-        run: flutter build apk --release
-      - uses: actions/upload-artifact@v4
+          flutter create . --platforms android
+          flutter pub get
+      - name: Build APK with Map
+        run: flutter build apk --release --no-tree-shake-icons
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          name: Dallini-APK
+          name: dalini-map-apk
           path: build/app/outputs/flutter-apk/app-release.apk
