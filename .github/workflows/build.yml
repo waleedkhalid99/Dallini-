@@ -11,16 +11,9 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.5'
+          flutter-version: '3.22.0'
           channel: 'stable'
-      - run: |
-          cp lib/main.dart /tmp/app.dart
-          cp pubspec.yaml /tmp/pub.yaml
-          flutter create . --project-name dallini --org com.dallini.app --platforms=android --overwrite
-          cp /tmp/app.dart lib/main.dart
-          cp /tmp/pub.yaml pubspec.yaml
-          flutter pub get
-          flutter build apk --release
+      - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
           name: Dallini-APK
