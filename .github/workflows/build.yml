@@ -1,4 +1,4 @@
-name: Build Dallini APK
+name: build dallini apk
 on: [push]
 jobs:
   build:
@@ -13,14 +13,14 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
-      - name: Create Android and Get Packages
+      - name: create android and get packages
         run: |
-          flutter create . --platforms android
+          flutter create . --platforms=android --project-name dallini --overwrite
           flutter pub get
-      - name: Build APK with Map
+      - name: build apk with map
         run: flutter build apk --release --no-tree-shake-icons
-      - name: Upload APK
+      - name: upload apk
         uses: actions/upload-artifact@v4
         with:
-          name: dalini-map-apk
+          name: dallini-map-apk
           path: build/app/outputs/flutter-apk/app-release.apk
