@@ -17,9 +17,13 @@ jobs:
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name dallini
+          # اضافة صلاحيات العراق كله
+          echo '<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+          <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+          <uses-permission android:name="android.permission.INTERNET" />' | cat - android/app/src/main/AndroidManifest.xml > temp && mv temp android/app/src/main/AndroidManifest.xml || true
       - run: flutter pub get
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v4
         with:
-          name: Dallini-APK-Map
+          name: Dallini-APK-Iraq
           path: build/app/outputs/flutter-apk/app-debug.apk
