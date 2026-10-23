@@ -26,21 +26,19 @@ jobs:
         run: flutter pub get
 
       - name: Fix Project Name
-        run: |
-          sed -i 's/^name: .*/name: dallini/' pubspec.yaml
-          cat pubspec.yaml | head -5
+        run: sed -i 's/^name: .*/name: dallini/' pubspec.yaml
 
       - name: Recreate Android folder
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name dallini
 
-      - name: Fix Min SDK for Plugins
+      - name: Fix Min SDK Correct Way
         run: |
-          echo "flutter.minSdkVersion=24" >> android/local.properties
-          sed -i 's/flutter.minSdkVersion=.*/flutter.minSdkVersion=24/' android/local.properties
-          sed -i 's/minSdkVersion.*/minSdkVersion 24/' android/app/build.gradle || true
-          sed -i 's/minSdk.*/minSdk = 24/' android/app/build.gradle.kts || true
+          echo "flutter.minSdkVersion=24" > android/local.properties
+          echo "flutter.targetSdkVersion=34" >> android/local.properties
+          echo "flutter.compileSdkVersion=34" >> android/local.properties
+          cat android/local.properties
 
       - name: Build APK
         run: flutter build apk --debug
