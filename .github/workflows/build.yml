@@ -23,12 +23,12 @@ jobs:
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name dallini
-      - name: Fix SDK correctly
+      - name: Fix SDK for flutter_tts
         run: |
           echo "" >> android/local.properties
-          echo "flutter.minSdkVersion=23" >> android/local.properties
-          echo "flutter.compileSdkVersion=34" >> android/local.properties
-          echo "flutter.targetSdkVersion=34" >> android/local.properties
+          echo "flutter.minSdkVersion=24" >> android/local.properties
+          echo "flutter.compileSdkVersion=36" >> android/local.properties
+          echo "flutter.targetSdkVersion=36" >> android/local.properties
           cat android/local.properties
       - name: Build APK
         run: flutter build apk --debug
