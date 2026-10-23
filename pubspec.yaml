@@ -1,16 +1,16 @@
-name: dallini
-description: Dallini - Ramadi Map
+name: dallini_iraq
+description: Dallini Iraq
 publish_to: 'none'
 version: 1.0.0+1
-
 environment:
   sdk: ">=3.0.0 <4.0.0"
-
 dependencies:
   flutter:
     sdk: flutter
   flutter_map: ^6.1.0
   latlong2: ^0.9.1
-
+  geolocator: ^12.0.0
+  http: ^1.2.0
+  flutter_tts: ^4.0.2
 flutter:
   uses-material-design: true
