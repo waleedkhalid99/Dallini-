@@ -1,16 +1,25 @@
-name: dallini_iraq
-description: Dallini Iraq
-publish_to: 'none'
-version: 1.0.0+1
-environment:
-  sdk: ">=3.0.0 <4.0.0"
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_map: ^6.1.0
-  latlong2: ^0.9.1
-  geolocator: ^12.0.0
-  http: ^1.2.0
-  flutter_tts: ^4.0.2
-flutter:
-  uses-material-design: true
+name: Build Dallini APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.2'
+          channel: 'stable'
+      - name: Fix Gradle project
+        run: |
+          rm -rf android
+          flutter create . --platforms=android --project-name dallini
+      - run: flutter pub get
+      - run: flutter build apk --debug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Dallini-APK-Iraq
+          path: build/app/outputs/flutter-apk/app-debug.apk
